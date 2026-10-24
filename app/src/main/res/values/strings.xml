@@ -6,4 +6,7 @@
     <string name="title_expose_filesystem">Expose entire filesystem</string>
     <string name="expose_filesystem_on">On</string>
     <string name="expose_filesystem_off">Off</string>
+    <string name="title_logging">Debug log</string>
+    <string name="logging_on">On (LOG.TXT)</string>
+    <string name="logging_off">Off</string>
 </resources>

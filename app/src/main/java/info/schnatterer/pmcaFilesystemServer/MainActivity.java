@@ -11,6 +11,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    private static final int POS_LOGGING = 3;
+    private static final int POS_EXPOSE_FS = 4;
+
     protected class ActivityListItem extends ListAdapter.ListItem {
         private int nameResource;
         private Class<? extends Activity> clazz;
@@ -37,6 +40,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
 
+        Logger.setEnabled(ServerSettings.isLoggingEnabled(this));
+        Logger.bootstrap("MainActivity.onCreate");
+
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
@@ -57,10 +63,25 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
     private void showMenu() {
         final boolean exposeFullFilesystem = ServerSettings.isExposeFullFilesystem(this);
+        final boolean loggingEnabled = ServerSettings.isLoggingEnabled(this);
+        // Order: keep Debug log above Expose FS so it shows on small camera LCDs.
         ListAdapter.ListItem[] items = new ListAdapter.ListItem[]{
                 new ActivityListItem(R.string.title_activity_wifi, WifiActivity.class),
                 new ActivityListItem(R.string.title_activity_wifi_direct, WifiDirectActivity.class),
                 new ActivityListItem(R.string.title_activity_wifi_setting, WifiSettingActivity.class),
+                new ListAdapter.ListItem() {
+                    @Override
+                    public String getText1() {
+                        return getResources().getString(R.string.title_logging);
+                    }
+
+                    @Override
+                    public String getText2() {
+                        return getResources().getString(loggingEnabled
+                                ? R.string.logging_on
+                                : R.string.logging_off);
+                    }
+                },
                 new ListAdapter.ListItem() {
                     @Override
                     public String getText1() {
@@ -83,7 +104,16 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         ListAdapter.ListItem item = (ListAdapter.ListItem) adapterView.getItemAtPosition(position);
         if (item instanceof ActivityListItem) {
             startActivity(new Intent(this, ((ActivityListItem) item).getActivityClass()));
-        } else {
+            return;
+        }
+        if (position == POS_LOGGING) {
+            boolean next = !ServerSettings.isLoggingEnabled(this);
+            ServerSettings.setLoggingEnabled(this, next);
+            Logger.setEnabled(next);
+            showMenu();
+            return;
+        }
+        if (position == POS_EXPOSE_FS) {
             ServerSettings.setExposeFullFilesystem(this, !ServerSettings.isExposeFullFilesystem(this));
             showMenu();
         }

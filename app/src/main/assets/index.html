@@ -48,9 +48,14 @@
             </button>
           </div>
         </form>
-        <div class="col-12 p-0 mb-4">
+        <div class="col-12 p-0 mb-2">
           <button class="btn btn-sm btn-block btn-outline-light my-2 my-sm-0" id="download" type="button">
             Download
+          </button>
+        </div>
+        <div class="col-12 p-0 mb-4">
+          <button class="btn btn-sm btn-block btn-outline-success my-2 my-sm-0" id="set-gps" type="button">
+            Set GPS
           </button>
         </div>
         <li class="nav-item dropdown">
@@ -100,7 +105,51 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
+          <button type="button" class="btn btn-success" id="info-set-gps">
+            Set GPS
+          </button>
           <a class="btn btn-primary model-link" href="#" target="_blank" download>Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- GPS modal -->
+  <div class="modal" tabindex="-1" role="dialog" id="gpsModel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Set GPS (<span id="gps-file-count">0</span> files)</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="small text-muted mb-2">
+            Writes GPS through the camera media API (Avindex) into JPEG and ARW.
+            Video is not supported. HTTP pages may block browser geolocation — paste lat/lon if needed.
+          </p>
+          <button type="button" class="btn btn-outline-info btn-sm mb-3" id="gps-use-browser">
+            Use browser location
+          </button>
+          <div class="form-group">
+            <label for="gps-lat">Latitude</label>
+            <input type="number" step="any" class="form-control" id="gps-lat" placeholder="31.230416" />
+          </div>
+          <div class="form-group">
+            <label for="gps-lon">Longitude</label>
+            <input type="number" step="any" class="form-control" id="gps-lon" placeholder="121.473701" />
+          </div>
+          <div class="form-group">
+            <label for="gps-alt">Altitude (m, optional)</label>
+            <input type="number" step="any" class="form-control" id="gps-alt" placeholder="" />
+          </div>
+          <pre class="bg-secondary small p-2 mb-0" id="gps-status" style="white-space: pre-wrap;"></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" id="gps-apply">Write GPS</button>
         </div>
       </div>
     </div>

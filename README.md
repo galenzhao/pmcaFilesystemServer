@@ -27,7 +27,7 @@ The PR for the new user interface hase been dangling for years. Now there is a p
 # Usage
 
 On Startup a WiFi Connection will be established. Once this succeeds a webserver is started 
-and its URL is displayed. The home page is a plain file list. `/gallery` is a thumbnail browser grouped by day, with filters, EXIF details, and zip download. Each page links to the other.
+and its URL is displayed. The home page is a plain file list. `/gallery` is a thumbnail browser grouped by day, with filters, EXIF details, zip download, and **Set GPS** (write coordinates into selected JPEG/ARW via the camera Avindex stack; JPEG+RAW pairs are written once). Each page links to the other.
 
 This works around the constraint of certain Sony cameras where videos can not be downloaded via WiFi.
 
@@ -45,12 +45,14 @@ See https://stackoverflow.com/a/3623727
 For creating a release, set git tag and then upload an *unsigned* APK to GitHub's release page.
 Signed APKs seem to be denied by Sony-PMCA-RE.
 
-The app writes a log file to the SD card: `/storage/sdcard0/pmcaFilesystemServer/LOG.TXT`.
+Optional debug logging to the SD card (main menu **Debug log** On/Off; default On). Typical path: `/mnt/sdcard/DCIM/PMCAFS/LOG.TXT` (also tried under `pmcaFilesystemServer/LOG.TXT`).
 
 ## Icon
 
 Was generated with 
 [AndroidAssetStudio](https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.text.text=HTTP%20FS&foreground.text.font=Allerta%20Stencil&foreground.space.trim=1&foreground.space.pad=0.1&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(139%2C%20195%2C%2074)&crop=0&backgroundShape=square&effects=none&name=ic_launcher) 
+
+See also: [docs/GPS-NOTES.md](docs/GPS-NOTES.md) (NEX-5R GPS background, Avindex `updateGps` API, Set GPS behaviour).
 
 ## Feature Ideas
 
