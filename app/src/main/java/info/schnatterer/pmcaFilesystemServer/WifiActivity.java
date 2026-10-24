@@ -52,7 +52,7 @@ public class WifiActivity extends BaseActivity {
             }
         };
 
-        httpServer = new HttpServer();
+        httpServer = new HttpServer(this, ServerSettings.isExposeFullFilesystem(this));
     }
 
     @Override
@@ -130,6 +130,6 @@ public class WifiActivity extends BaseActivity {
     }
 
     protected void log(String msg) {
-        textView.setText(msg);
+        textView.setText(msg + "\nUser: " + httpServer.getUsername() + "\nPassword: " + httpServer.getPassword());
     }
 }

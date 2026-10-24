@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "icons";
+    src: url("../fonts/icons.eot?c9315cc8de50c0559b5ea1051441f336?#iefix") format("embedded-opentype"),
+url("../fonts/icons.woff2?c9315cc8de50c0559b5ea1051441f336") format("woff2"),
+url("../fonts/icons.woff?c9315cc8de50c0559b5ea1051441f336") format("woff"),
+url("../fonts/icons.ttf?c9315cc8de50c0559b5ea1051441f336") format("truetype"),
+url("../fonts/icons.svg?c9315cc8de50c0559b5ea1051441f336#icons") format("svg");
+}
+
+i[class^="icon-"]:before, i[class*=" icon-"]:before {
+    font-family: icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-aperture:before {
+    content: "\f101";
+}
+.icon-camera:before {
+    content: "\f102";
+}
+.icon-focal:before {
+    content: "\f103";
+}
+.icon-iso:before {
+    content: "\f104";
+}
+.icon-screen:before {
+    content: "\f105";
+}
+.icon-speed:before {
+    content: "\f106";
+}
+.icon-storage:before {
+    content: "\f107";
+}

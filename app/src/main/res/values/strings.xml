@@ -3,4 +3,7 @@
     <string name="title_activity_wifi">Start Server via Wifi</string>
     <string name="title_activity_wifi_setting">Wifi Settings</string>
     <string name="title_activity_wifi_direct">Start Server via Wifi direct</string>
+    <string name="title_expose_filesystem">Expose entire filesystem</string>
+    <string name="expose_filesystem_on">On</string>
+    <string name="expose_filesystem_off">Off</string>
 </resources>

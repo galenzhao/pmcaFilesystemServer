@@ -27,13 +27,11 @@ The PR for the new user interface hase been dangling for years. Now there is a p
 # Usage
 
 On Startup a WiFi Connection will be established. Once this succeeds a webserver is started 
-and its URL is displayed. There you can download all data from the camera, like images and videos.
+and its URL is displayed. The home page is a plain file list. `/gallery` is a thumbnail browser grouped by day, with filters, EXIF details, and zip download. Each page links to the other.
 
 This works around the constraint of certain Sony cameras where videos can not be downloaded via WiFi.
 
-<font color="red">⚠</font>  The Web Server exposes the whole file system without authentication to everyone on the same network 
-as the camera. Make sure to run this in a private network, using WiFi direct or by using your 
-Mobile's Hotspot.
+<font color="red">⚠</font>  The web server requires HTTP Basic authentication. The username and password are shown on the camera screen and change each time the server screen is opened again. By default only photos and videos can be downloaded. The whole file system is exposed only after turning on "Expose entire filesystem" on the main screen. Make sure to run this in a private network, using WiFi direct or by using your Mobile's Hotspot.
 
 # Development
 

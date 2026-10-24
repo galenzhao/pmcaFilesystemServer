@@ -83,7 +83,7 @@ public class WifiDirectActivity extends BaseActivity {
             }
         };
 
-        httpServer = new HttpServer();
+        httpServer = new HttpServer(this, ServerSettings.isExposeFullFilesystem(this));
     }
 
     @Override
@@ -158,6 +158,8 @@ public class WifiDirectActivity extends BaseActivity {
         log("SSID: " + configuration.getSsid());
         log("Key: " + configuration.getPreSharedKey());
         log("Server URL: http://" + MY_IP_ADDRESS + ":" + HttpServer.PORT + "/");
+        log("User: " + httpServer.getUsername());
+        log("Password: " + httpServer.getPassword());
     }
 
     protected void groupCreateFailed() {
