@@ -7,3 +7,4 @@ require('../../main/js/loader').init(base, meta);
 require('../../main/js/modal')(base);
 require('../../main/js/download').init(meta);
 require('../../main/js/gps').init(base);
+require('../../main/js/media-ops').init(base);

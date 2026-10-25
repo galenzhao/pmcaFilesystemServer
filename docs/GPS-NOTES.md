@@ -165,9 +165,9 @@ cd .. && ./gradlew assembleDebug
 
 ### Possible next steps
 
-- [ ] Map picker / paste Maps share URL
-- [ ] Clear GPS / edit altitude only
-- [ ] Batch by day
+- [x] Clear GPS (`deleteGps`) — see [MEDIA-OPS-NOTES.md](MEDIA-OPS-NOTES.md)
+- [x] Paste Maps share URL / plain lat,lon
+- [x] Batch by day (day header Set GPS)
 - [ ] Research movie URIs with `updateGps` (likely still-only)
 - [ ] Long-term: at-capture `SetStillGpsInfo` injection
 

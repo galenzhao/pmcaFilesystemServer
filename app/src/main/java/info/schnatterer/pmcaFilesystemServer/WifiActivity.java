@@ -4,18 +4,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.NetworkInfo;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
 
 public class WifiActivity extends BaseActivity {
     private TextView textView;
+    private ImageView qrView;
     private WifiManager wifiManager;
     private BroadcastReceiver wifiStateReceiver;
     private BroadcastReceiver supplicantStateReceiver;
@@ -28,6 +32,7 @@ public class WifiActivity extends BaseActivity {
         setContentView(R.layout.log);
 
         textView = (TextView) findViewById(R.id.logView);
+        qrView = (ImageView) findViewById(R.id.qrView);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
@@ -114,9 +119,11 @@ public class WifiActivity extends BaseActivity {
                 wifiConnected();
                 break;
             case DISCONNECTED:
+                hideQr();
                 log("Disconnected");
                 break;
             case FAILED:
+                hideQr();
                 log("Connection failed");
                 break;
         }
@@ -126,10 +133,40 @@ public class WifiActivity extends BaseActivity {
         WifiInfo info = wifiManager.getConnectionInfo();
         String ssid = info.getSSID();
         String ip = Formatter.formatIpAddress(info.getIpAddress());
-        log(ssid + ": Connected. Server URL: http://" + ip + ":" + HttpServer.PORT + "/");
+        String publicUrl = "http://" + ip + ":" + HttpServer.PORT + "/";
+        String token = httpServer.getAccessToken();
+        String galleryAuthUrl = QrCodeHelper.galleryUrl(ip, HttpServer.PORT, token);
+        showQr(galleryAuthUrl);
+        textView.setText(ssid + ": Connected\n"
+                + "Server: " + publicUrl + "\n"
+                + "Gallery: " + publicUrl + "gallery\n"
+                + "Access code: " + token + "\n"
+                + "(enter as username or password)\n"
+                + "Scan QR for gallery (includes login)");
     }
 
     protected void log(String msg) {
-        textView.setText(msg + "\nUser: " + httpServer.getUsername() + "\nPassword: " + httpServer.getPassword());
+        textView.setText(msg + "\nAccess code: " + httpServer.getAccessToken()
+                + "\n(enter as username or password)");
+    }
+
+    private void showQr(String content) {
+        if (qrView == null) {
+            return;
+        }
+        Bitmap bitmap = QrCodeHelper.encode(content, 360);
+        if (bitmap != null) {
+            qrView.setImageBitmap(bitmap);
+            qrView.setVisibility(View.VISIBLE);
+        } else {
+            hideQr();
+        }
+    }
+
+    private void hideQr() {
+        if (qrView != null) {
+            qrView.setVisibility(View.GONE);
+            qrView.setImageDrawable(null);
+        }
     }
 }

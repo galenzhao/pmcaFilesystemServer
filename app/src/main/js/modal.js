@@ -66,6 +66,11 @@ function init(base) {
         } else {
           detail += `<p class="mt-3 mb-1 text-muted">No GPS</p>`;
         }
+        if (json.protected === true) {
+          detail += `<p class="mb-1 text-warning">Protected (read-only flag)</p>`;
+        } else if (json.protect === "unprotected") {
+          detail += `<p class="mb-1 text-muted">Not protected</p>`;
+        }
         modal.find(".modal-detail").html(detail);
       } else {
         modal.find(".modal-detail").text(`Failed to load EXIF for ${json.Name}`);

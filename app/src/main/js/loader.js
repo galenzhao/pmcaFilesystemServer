@@ -14,6 +14,23 @@ function init(base, meta) {
         } else {
             $("#link-logfile").hide();
         }
+        const status = document.getElementById("device-status");
+        if (status) {
+            const parts = [];
+            if (meta.firmware) {
+                parts.push("FW " + meta.firmware);
+            }
+            if (typeof meta.batteryPercent === "number") {
+                parts.push("Batt " + meta.batteryPercent + "%");
+            }
+            if (meta.freeSpace) {
+                parts.push("Free " + meta.freeSpace);
+            }
+            if (meta.cameraClock) {
+                parts.push(meta.cameraClock.replace("T", " "));
+            }
+            status.textContent = parts.join(" · ");
+        }
     });
 
     // load filter settings from local storage
@@ -30,12 +47,25 @@ function init(base, meta) {
     $("#filter").click(function () {
         onFilterChanged(base, days, meta);
     });
+
+    let searchTimer = null;
+    $("#search-name").on("input", function () {
+        const q = $(this).val();
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () {
+            applyNameSearch(q);
+        }, 120);
+    });
 }
 
 function loadFiles(base, types, meta, days) {
     document.title = "Loading...";
     $("#download").hide();
     $("#set-gps").hide();
+    $("#clear-gps").hide();
+    $("#rotate-cw").hide();
+    $("#rotate-ccw").hide();
+    $("#delete-media").hide();
     const li = document.getElementById("main-gallery");
     li.innerHTML = `
       <div class="alert alert-info mx-auto">
@@ -65,8 +95,11 @@ function loadFiles(base, types, meta, days) {
                 var template = document.createElement("template");
                 template.innerHTML = `
               <h4 id="day-${dayId}" class="col-12 clearfix day-title">
-                <div class="form-check float-right">
-                  <input class="form-check-input position-static checkbox-download-day" type="checkbox" data-day="${dayId}">
+                <div class="float-right">
+                  <button type="button" class="btn btn-sm btn-outline-success btn-day-gps mr-2" data-day="${dayId}">Set GPS</button>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input position-static checkbox-download-day" type="checkbox" data-day="${dayId}">
+                  </div>
                 </div>
                 ${day.toLocaleDateString()}
               </h4>`;
@@ -77,7 +110,7 @@ function loadFiles(base, types, meta, days) {
             var template = document.createElement("template");
             // prettier-ignore
             template.innerHTML = `
-            <div class="col-lg-2 col-md-4 col-6">
+            <div class="col-lg-2 col-md-4 col-6 gallery-item" data-name="${image.name.toLowerCase()}" data-day="${dayId}">
               <div class="card mb card-link" data-name="${image.name}" data-file="${image.file}" data-size="${image.size}" data-href="${base}${image.file}" data-day="${dayId}">
                 <div class="form-check position-absolute">
                   <input class="form-check-input position-static checkbox-download" type="checkbox" id="blankCheckbox" value="option1">
@@ -108,6 +141,29 @@ function loadFiles(base, types, meta, days) {
         var lazyLoadInstance = new LazyLoad({});
 
         document.title = `${json.length} images - ${meta.brand} ${meta.model}`;
+        applyNameSearch($("#search-name").val());
+    });
+}
+
+function applyNameSearch(raw) {
+    const q = (raw || "").trim().toLowerCase();
+    if (!q) {
+        $(".gallery-item").show();
+        $(".day-title").show();
+        return;
+    }
+    const visibleDays = {};
+    $(".gallery-item").each(function () {
+        const name = String($(this).data("name") || "");
+        const match = name.indexOf(q) >= 0;
+        $(this).toggle(match);
+        if (match) {
+            visibleDays[$(this).data("day")] = true;
+        }
+    });
+    $(".day-title").each(function () {
+        const id = this.id.replace(/^day-/, "");
+        $(this).toggle(!!visibleDays[id]);
     });
 }
 

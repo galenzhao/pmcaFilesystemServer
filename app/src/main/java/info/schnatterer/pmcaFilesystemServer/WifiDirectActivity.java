@@ -5,8 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sony.wifi.direct.DirectConfiguration;
@@ -19,6 +22,7 @@ public class WifiDirectActivity extends BaseActivity {
     public static final String MY_IP_ADDRESS = "192.168.122.1";
 
     private TextView textView;
+    private ImageView qrView;
     private WifiManager wifiManager;
     private DirectManager wifiDirectManager;
     private BroadcastReceiver wifiStateReceiver;
@@ -37,6 +41,7 @@ public class WifiDirectActivity extends BaseActivity {
         setContentView(R.layout.log);
 
         textView = (TextView) findViewById(R.id.logView);
+        qrView = (ImageView) findViewById(R.id.qrView);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         wifiDirectManager = (DirectManager) getApplicationContext().getSystemService(DirectManager.WIFI_DIRECT_SERVICE);
@@ -154,15 +159,21 @@ public class WifiDirectActivity extends BaseActivity {
     }
 
     protected void groupCreated(DirectConfiguration configuration) {
+        String publicUrl = "http://" + MY_IP_ADDRESS + ":" + HttpServer.PORT + "/";
+        String token = httpServer.getAccessToken();
+        String galleryAuthUrl = QrCodeHelper.galleryUrl(MY_IP_ADDRESS, HttpServer.PORT, token);
+        showQr(galleryAuthUrl);
         log("Group created");
         log("SSID: " + configuration.getSsid());
         log("Key: " + configuration.getPreSharedKey());
-        log("Server URL: http://" + MY_IP_ADDRESS + ":" + HttpServer.PORT + "/");
-        log("User: " + httpServer.getUsername());
-        log("Password: " + httpServer.getPassword());
+        log("Server URL: " + publicUrl);
+        log("Access code: " + token);
+        log("(enter as username or password)");
+        log("Scan QR for gallery (includes login)");
     }
 
     protected void groupCreateFailed() {
+        hideQr();
         log("Group create failed");
     }
 
@@ -176,5 +187,25 @@ public class WifiDirectActivity extends BaseActivity {
 
     protected void log(String msg) {
         textView.append(msg + "\n");
+    }
+
+    private void showQr(String content) {
+        if (qrView == null) {
+            return;
+        }
+        Bitmap bitmap = QrCodeHelper.encode(content, 360);
+        if (bitmap != null) {
+            qrView.setImageBitmap(bitmap);
+            qrView.setVisibility(View.VISIBLE);
+        } else {
+            hideQr();
+        }
+    }
+
+    private void hideQr() {
+        if (qrView != null) {
+            qrView.setVisibility(View.GONE);
+            qrView.setImageDrawable(null);
+        }
     }
 }

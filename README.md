@@ -27,11 +27,11 @@ The PR for the new user interface hase been dangling for years. Now there is a p
 # Usage
 
 On Startup a WiFi Connection will be established. Once this succeeds a webserver is started 
-and its URL is displayed. The home page is a plain file list. `/gallery` is a thumbnail browser grouped by day, with filters, EXIF details, zip download, and **Set GPS** (write coordinates into selected JPEG/ARW via the camera Avindex stack; JPEG+RAW pairs are written once). Each page links to the other.
+and its URL is displayed (with a **QR code** encoding the gallery URL + Basic Auth). The home page is a plain file list. `/gallery` is a thumbnail browser grouped by day (name search, filters, EXIF + protect flag, zip **Original/~2MP/VGA**, Set/Clear GPS with Maps paste + per-day, rotate, delete). `/map` plots geotagged stills offline. Each page links to the other.
 
 This works around the constraint of certain Sony cameras where videos can not be downloaded via WiFi.
 
-<font color="red">⚠</font>  The web server requires HTTP Basic authentication. The username and password are shown on the camera screen and change each time the server screen is opened again. By default only photos and videos can be downloaded. The whole file system is exposed only after turning on "Expose entire filesystem" on the main screen. Make sure to run this in a private network, using WiFi direct or by using your Mobile's Hotspot.
+<font color="red">⚠</font>  The web server requires HTTP Basic authentication. A single **access code** is shown on the camera screen (and embedded in the QR); enter it as **either** the username **or** the password (the other field can be blank). It changes each time the server screen is opened again. By default only photos and videos can be downloaded. The whole file system is exposed only after turning on "Expose entire filesystem" on the main screen. Make sure to run this in a private network, using WiFi direct or by using your Mobile's Hotspot.
 
 # Development
 
@@ -52,9 +52,12 @@ Optional debug logging to the SD card (main menu **Debug log** On/Off; default O
 Was generated with 
 [AndroidAssetStudio](https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.text.text=HTTP%20FS&foreground.text.font=Allerta%20Stencil&foreground.space.trim=1&foreground.space.pad=0.1&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(139%2C%20195%2C%2074)&crop=0&backgroundShape=square&effects=none&name=ic_launcher) 
 
-See also: [docs/GPS-NOTES.md](docs/GPS-NOTES.md) (NEX-5R GPS background, Avindex `updateGps` API, Set GPS behaviour).
+See also:
+
+* [docs/GPS-NOTES.md](docs/GPS-NOTES.md) — NEX-5R GPS / Avindex `updateGps`
+* [docs/MEDIA-OPS-NOTES.md](docs/MEDIA-OPS-NOTES.md) — clear GPS, rotate, delete, meta status, connect QR
 
 ## Feature Ideas
 
-* QR Code: https://stackoverflow.com/a/8800974/
-* Basic Auth: https://github.com/NanoHttpd/nanohttpd/issues/496
+* Face-box overlay from Avindex face info
+* Optional at-capture geotag research (native `SetStillGpsInfo`)

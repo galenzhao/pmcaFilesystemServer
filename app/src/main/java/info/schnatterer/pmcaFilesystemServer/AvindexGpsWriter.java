@@ -286,7 +286,7 @@ final class AvindexGpsWriter {
         }
     }
 
-    private static final class ResolvedMedia {
+    static final class ResolvedMedia {
         final Uri uri;
         final long id;
 
@@ -296,7 +296,7 @@ final class AvindexGpsWriter {
         }
     }
 
-    private ResolvedMedia resolveStill(File source) throws Exception {
+    ResolvedMedia resolveStill(File source) throws Exception {
         String absolute;
         try {
             absolute = source.getCanonicalPath();
@@ -900,7 +900,7 @@ final class AvindexGpsWriter {
         }
     }
 
-    private static Uri mediaBaseUri(Uri itemUri) {
+    static Uri mediaBaseUri(Uri itemUri) {
         if (itemUri == null) {
             return null;
         }
@@ -910,6 +910,10 @@ final class AvindexGpsWriter {
             return itemUri;
         }
         return Uri.parse(s.substring(0, slash));
+    }
+
+    Context getContext() {
+        return context;
     }
 
     private Method findUpdateGps() {

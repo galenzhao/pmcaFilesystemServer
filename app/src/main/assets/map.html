@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>GPS map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap.min.css" />
+  <style>
+    body { background: #1a1d21; color: #eee; }
+    #map-plot {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 120px);
+      min-height: 320px;
+      background: #0d1117;
+      border: 1px solid #333;
+      overflow: hidden;
+    }
+    #map-plot .marker {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      margin: -7px 0 0 -7px;
+      border-radius: 50%;
+      background: #28a745;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 0 4px rgba(0,0,0,.6);
+    }
+    #map-plot .marker:hover, #map-plot .marker.active {
+      background: #ffc107;
+      z-index: 2;
+      transform: scale(1.3);
+    }
+    #map-empty { display: none; }
+    #side-list { max-height: calc(100vh - 120px); overflow-y: auto; }
+    #side-list a { color: #9fdf9f; }
+    #side-list a.active { color: #ffc107; font-weight: bold; }
+    .axis-label { position: absolute; color: #666; font-size: 11px; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand mb-0 h1" id="title">GPS map</span>
+    <div>
+      <a class="btn btn-sm btn-outline-light" href="/gallery">Gallery</a>
+      <a class="btn btn-sm btn-outline-light" href="/">Files</a>
+    </div>
+  </nav>
+  <div class="container-fluid mt-2">
+    <p class="small text-muted mb-2" id="status">Loading geotagged stills…</p>
+    <div class="row">
+      <div class="col-lg-9 mb-2">
+        <div id="map-plot">
+          <div id="map-empty" class="p-4 text-center text-muted">No geotagged photos found.</div>
+        </div>
+        <p class="small text-muted mt-1">
+          Offline plot (no map tiles — camera Wi‑Fi usually has no internet).
+          Axes are lat/lon of your photos only.
+        </p>
+      </div>
+      <div class="col-lg-3 mb-2">
+        <div id="side-list" class="small"></div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/map.js"></script>
+</body>
+</html>

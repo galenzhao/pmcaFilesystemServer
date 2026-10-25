@@ -29,6 +29,8 @@ final class AvindexApiProbe {
             logNamedMethods(store, "updateGps");
             logNamedMethods(store, "deleteGps");
             logNamedMethods(store, "getExternalMediaIds");
+            logNamedMethods(store, "getAvailableSize");
+            logNamedMethods(store, "calculateAvailableSize");
             logNamedMethods(store, "loadMedia");
             logNamedMethods(store, "waitLoadMediaComplete");
             logMediaIds(store);
@@ -49,12 +51,18 @@ final class AvindexApiProbe {
                 logNamedMethods(media, "getContentUri");
                 logNamedMethods(media, "updateGps");
                 logNamedMethods(media, "deleteGps");
+                logNamedMethods(media, "deleteImage");
+                logNamedMethods(media, "deleteMultiImage");
                 logNamedMethods(media, "getUniqId");
                 logNamedMethods(media, "getImageInfo");
                 logNamedMethods(media, "rotateImage");
+                logNamedMethods(media, "getScreennail");
+                logNamedMethods(media, "getScreennailInputStream");
                 logMethodsMatching(media, "gps");
                 logMethodsMatching(media, "Gps");
                 logMethodsMatching(media, "Uniq");
+                logMethodsMatching(media, "delete");
+                logMethodsMatching(media, "rotate");
             } catch (ClassNotFoundException e) {
                 Logger.info("AvindexApiProbe: Images.Media missing: " + e.getMessage());
             }
